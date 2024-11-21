@@ -130,7 +130,9 @@ def create_token():
         return jsonify({"msg": "Bad email or password"}), 401
     
     # Create a new token with the user id inside
-    access_token = create_access_token(identity=user.id)
+    # access_token = create_access_token(identity=str(user.id))
+    access_token = create_access_token(identity=user.email)
+
     return jsonify({ "token": access_token, "user_id": user.id })
 
 
@@ -140,10 +142,12 @@ def create_token():
 @jwt_required()  # Ensures this route is protected and requires a valid JWT
 def protected():
     # Get the identity of the currently authenticated user
-    current_user_id = get_jwt_identity()
+    current_user = get_jwt_identity()
 
     # Query the database for the user
-    user = User.query.get(current_user_id)
+    # user = User.query.get(current_user)
+    user = User.query.filter_by(email=current_user).first()
+
 
     if user is None:
         return jsonify({"msg": "User not found"}), 404

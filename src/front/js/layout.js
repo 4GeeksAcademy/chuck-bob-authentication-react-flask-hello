@@ -37,9 +37,9 @@ const Layout = () => {
                         <Route element={<Login />} path="/login" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route
-                        path="/protected"
+                        path="/protectedpage"
                         element={
-                            <ProtectedRoute> <ProtectedPage /> </ProtectedRoute> 
+                        <ProtectedPage /> 
                         }/>
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>

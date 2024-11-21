@@ -9,13 +9,16 @@ const ProtectedPage = () => {
             const token = localStorage.getItem("jwt-token");
 
             try {
-                const response = await fetch("https://potential-space-spoon-wr96qxw99x79fgrj5-3001.app.github.dev/protected", {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                });
+                const response = await fetch(
+                    "https://potential-space-spoon-wr96qxw99x79fgrj5-3001.app.github.dev/protected",
+                    {
+                        method: "GET",
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
 
                 if (!response.ok) {
                     if (response.status === 403) {
@@ -36,7 +39,15 @@ const ProtectedPage = () => {
 
     return (
         <div>
-           <p>Hi!</p>
+            <h1>Protected Page</h1>
+            <p>Hi! You logged in!</p> {/* Always visible */}
+            {error ? (
+                <p style={{ color: "red" }}>{error}</p> // Show error if any
+            ) : data ? (
+                <pre>{JSON.stringify(data, null, 2)}</pre> // Show data if available
+            ) : (
+                <p>Loading...</p> // Show while data is loading
+            )}
         </div>
     );
 };

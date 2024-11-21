@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
-import { Link } from "react-router-dom";
 
 export const Login = () => {
     const { actions } = useContext(Context);
@@ -37,8 +36,15 @@ export const Login = () => {
             actions.setUser({ id: data.user_id, email }); // Replace setUid with setUser
 
             setError(""); // Clear any errors
-            alert("Login successful!"); // Notify user
-            navigate("/"); // Redirect to home page
+
+            // Check for token and redirect accordingly
+            const token = localStorage.getItem("jwt-token");
+            if (token) {
+                alert("Login successful!"); // Notify user
+                navigate("/protectedpage"); // Redirect to the protected page
+            } else {
+                navigate("/404"); // Redirect to 404 page if token is not found
+            }
         } catch (err) {
             setError(err.message); // Display error message
         }
@@ -64,11 +70,9 @@ export const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-<button type="submit" id="login-button">
-    <Link to="/protectedpage" style={{ textDecoration: "none", color: "inherit" }}>
-        Login
-    </Link>
-</button>
+                <button type="submit" id="login-button">
+                    Login
+                </button>
             </form>
             {error && <p style={{ color: "red" }}>{error}</p>}
         </div>
